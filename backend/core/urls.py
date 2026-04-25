@@ -1,16 +1,20 @@
 from django.contrib import admin
 from django.urls import path, include
+
+admin.site.site_url = 'http://localhost:5173/'
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from menu.views import CategoryViewSet, DishViewSet
+from menu.views import CategoryViewSet, DishViewSet, HeroBannerViewSet, GalleryImageViewSet
 from corporate.views import CorporateServiceViewSet
 from contact.views import ContactRequestViewSet
 
 router = DefaultRouter()
+router.register(r'hero', HeroBannerViewSet, basename='hero')
+router.register(r'gallery', GalleryImageViewSet, basename='gallery')
 router.register(r'categories', CategoryViewSet)
 router.register(r'dishes', DishViewSet)
 router.register(r'corporate', CorporateServiceViewSet)

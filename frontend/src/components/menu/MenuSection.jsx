@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import DishModal from './DishModal';
 
 const MenuSection = () => {
   const [categories, setCategories] = useState([]);
   const [dishes, setDishes] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedDish, setSelectedDish] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -15,7 +17,7 @@ const MenuSection = () => {
         const res = await axios.get(`${API_URL}/api/categories/`);
         setCategories(res.data);
         if (res.data.length > 0) {
-          setActiveCategory(res.data[0].slug);
+          setActiveCategory('all');
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -29,7 +31,10 @@ const MenuSection = () => {
       if (!activeCategory) return;
       setLoading(true);
       try {
-        const res = await axios.get(`${API_URL}/api/dishes/?category=${activeCategory}`);
+        const url = activeCategory === 'all' 
+          ? `${API_URL}/api/dishes/` 
+          : `${API_URL}/api/dishes/?category=${activeCategory}`;
+        const res = await axios.get(url);
         setDishes(res.data);
       } catch (error) {
         console.error("Error fetching dishes:", error);
@@ -54,6 +59,16 @@ const MenuSection = () => {
 
         {/* Categories Tab */}
         <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+          <button
+            onClick={() => setActiveCategory('all')}
+            className={`px-6 py-2.5 rounded-full text-base sm:text-lg font-medium transition-all duration-300 shadow-sm
+              ${activeCategory === 'all' 
+                ? 'bg-primary-600 text-white shadow-md transform scale-105' 
+                : 'bg-white text-gray-600 hover:bg-primary-50 border border-gray-100 hover:text-primary-700'
+              }`}
+          >
+            Всі страви
+          </button>
           {categories.map((cat) => (
             <button
               key={cat.id}
@@ -77,7 +92,11 @@ const MenuSection = () => {
         ) : dishes.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {dishes.map((dish) => (
-              <div key={dish.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-50 flex flex-col group">
+              <div 
+                key={dish.id} 
+                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-50 flex flex-col group cursor-pointer"
+                onClick={() => setSelectedDish(dish)}
+              >
                 <div className="relative h-56 overflow-hidden bg-gray-100">
                   {dish.main_image ? (
                     <img 
@@ -108,10 +127,13 @@ const MenuSection = () => {
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-4 flex-grow">
+                  <p className="text-gray-500 text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
                     {dish.description}
                   </p>
-                  <button className="w-full py-2.5 rounded border border-primary-200 text-primary-600 font-medium hover:bg-primary-50 transition-colors mt-auto">
+                  <button 
+                    className="w-full py-2.5 rounded border border-primary-200 text-primary-600 font-medium hover:bg-primary-50 transition-colors mt-auto"
+                    onClick={(e) => { e.stopPropagation(); setSelectedDish(dish); }}
+                  >
                     Детальніше
                   </button>
                 </div>
@@ -125,6 +147,9 @@ const MenuSection = () => {
         )}
 
       </div>
+
+      {/* Dish Modal */}
+      <DishModal dish={selectedDish} onClose={() => setSelectedDish(null)} />
     </section>
   );
 };

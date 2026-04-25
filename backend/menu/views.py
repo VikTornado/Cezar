@@ -1,7 +1,17 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
-from .models import Category, Dish
-from .serializers import CategorySerializer, DishSerializer
+from .models import Category, Dish, HeroBanner, GalleryImage
+from .serializers import CategorySerializer, DishSerializer, HeroBannerSerializer, GalleryImageSerializer
+
+class GalleryImageViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = GalleryImage.objects.filter(is_visible=True)
+    serializer_class = GalleryImageSerializer
+    permission_classes = [AllowAny]
+
+class HeroBannerViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = HeroBanner.objects.filter(is_active=True)
+    serializer_class = HeroBannerSerializer
+    permission_classes = [AllowAny]
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()

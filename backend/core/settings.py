@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g)oit2&z+%wxv*)c)-&+lwz4uagtq4-_$8m2j!*hf%q9c@zgh7'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-g)oit2&z+%wxv*)c)-&+lwz4uagtq4-_$8m2j!*hf%q9c@zgh7')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -150,3 +154,6 @@ REST_FRAMEWORK = {
 
 # Fix Admin "View Site" link
 SITE_URL = 'http://localhost:5173/'
+
+LOGIN_REDIRECT_URL = 'http://localhost:5173/'
+LOGOUT_REDIRECT_URL = 'http://localhost:5173/'

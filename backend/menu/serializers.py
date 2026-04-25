@@ -1,5 +1,15 @@
 from rest_framework import serializers
-from .models import Category, Dish, DishImage
+from .models import Category, Dish, DishImage, HeroBanner, GalleryImage
+
+class GalleryImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GalleryImage
+        fields = ['id', 'image', 'caption', 'order']
+
+class HeroBannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HeroBanner
+        fields = ['id', 'title', 'subtitle', 'image', 'is_active']
 
 class DishImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -12,7 +22,7 @@ class DishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Dish
-        fields = ['id', 'title', 'category', 'category_slug', 'description', 'price', 'main_image', 'is_popular', 'is_available', 'images']
+        fields = ['id', 'title', 'category', 'category_slug', 'description', 'price', 'weight', 'calories', 'ingredients', 'main_image', 'is_popular', 'is_available', 'images']
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
