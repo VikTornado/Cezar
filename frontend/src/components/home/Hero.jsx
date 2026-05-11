@@ -55,7 +55,7 @@ const Hero = () => {
               Переглянути меню
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </a>
-            <a href="#contacts" className="btn-secondary !text-white !border-white hover:!bg-white/10 flex items-center justify-center text-lg backdrop-blur-sm">
+            <a href="#contacts" className="btn-secondary !bg-white !text-black !border-white hover:!bg-transparent hover:!text-white flex items-center justify-center text-lg transition-colors backdrop-blur-sm">
               Зробити замовлення
             </a>
           </div>
